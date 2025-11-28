@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TalkMeter — A Mini Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Courgette&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#ff7aa2;--muted:#98a0b3;--glass:rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071021 0%, #071733 60%);font-family:Inter,system-ui,Arial;color:#e6eef8}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{width:100%;max-width:760px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:16px;padding:28px;box-shadow:0 10px 30px rgba(2,6,23,0.6);backdrop-filter:blur(6px)}
+    header{display:flex;align-items:center;gap:14px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#9ad7ff);display:flex;align-items:center;justify-content:center;font-family:Courgette;font-size:22px;color:#061226}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:6px 0 18px;color:var(--muted)}
+    .qbox{margin-top:12px}
+    .question{background:var(--glass);padding:14px;border-radius:12px;margin-bottom:12px}
+    .qtext{font-weight:600}
+    .options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+    .opt{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:10px;border-radius:10px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:10px}
+    .opt:hover{transform:translateY(-4px);box-shadow:0 6px 20px rgba(0,0,0,0.4)}
+    .myst{font-size:13px;color:#c7d6ff;margin-top:8px}
+    .btn{display:inline-block;margin-top:16px;padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#9ad7ff);color:#061226;font-weight:700;border:none;cursor:pointer}
+    .hidden{display:none}
+    .result{padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));margin-top:12px}
+    .small{font-size:13px;color:var(--muted)}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    @media (max-width:560px){.options{grid-template-columns:1fr}.card{padding:18px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="app">
+      <header>
+        <div class="logo">❤T</div>
+        <div>
+          <h1>TalkMeter — A tiny game to break the ice</h1>
+          <p class="lead">Cute • Funny • A little mysterious • Flirty (but tasteful). Just 6 playful questions.</p>
+        </div>
+      </header>
+
+      <main>
+        <section id="page-1" class="page">
+          <div style="margin-top:18px">
+            <p class="small">Hi! This is a tiny game — no pressure. Choose what feels fun. Answers are anonymous and just for vibe-checking.</p>
+            <button class="btn" id="startBtn">Start the Game</button>
+          </div>
+        </section>
+
+        <section id="quiz" class="hidden">
+          <!-- Question template repeated -->
+
+          <div class="qbox" data-q="1">
+            <div class="question">
+              <div class="qtext">1) Imagine your perfect hangout — which of these sounds most like you?</div>
+              <div class="options">
+                <div class="opt" data-val="cafe">A cozy corner cafe with soft music</div>
+                <div class="opt" data-val="rooftop">A small rooftop with fairy lights & chai</div>
+                <div class="opt" data-val="home">A home movie-night den with snacks</div>
+                <div class="opt" data-val="museum">A quiet museum corner — artsy & thoughtful</div>
+              </div>
+              <div class="myst">(Pick the one that feels most ‘you’ — this tells me what you enjoy without asking directly 😉)</div>
+            </div>
+          </div>
+
+          <div class="qbox" data-q="2">
+            <div class="question">
+              <div class="qtext">2) Choose a weekend plan that sounds most you:</div>
+              <div class="options">
+                <div class="opt" data-val="friends">Catching up with friends & memes</div>
+                <div class="opt" data-val="solo">A cozy solo movie marathon</div>
+                <div class="opt" data-val="adventure">A sudden plan — roadtrip or cafe-hop</div>
+                <div class="opt" data-val="family">Family time & food</div>
+              </div>
+              <div class="myst">(There’s a small hint about your go-to vibe hidden in this choice 👀)</div>
+            </div>
+          </div>
+
+          <div class="qbox" data-q="3">
+            <div class="question">
+              <div class="qtext">3) If your message bubble had a signature emoji, which one would it be?</div>
+              <div class="options">
+                <div class="opt" data-val="heart">❤️</div>
+                <div class="opt" data-val="laugh">😂</div>
+                <div class="opt" data-val="spark">✨</div>
+                <div class="opt" data-val="shrug">🤷‍♀️</div>
+              </div>
+              <div class="myst">(I’ll try to match how you text. No stalking — promise 😄)</div>
+            </div>
+          </div>
+
+          <div class="qbox" data-q="4">
+            <div class="question">
+              <div class="qtext">4) What’s your perfect mini surprise?</div>
+              <div class="options">
+                <div class="opt" data-val="note">A handwritten note</div>
+                <div class="opt" data-val="snack">A surprise snack delivery</div>
+                <div class="opt" data-val="ticket">An impromptu movie ticket</div>
+                <div class="opt" data-val="song">A song dedicated to me</div>
+              </div>
+              <div class="myst">(One of these tells me what makes you melt — or smile.)</div>
+            </div>
+          </div>
+
+          <div class="qbox" data-q="5">
+            <div class="question">
+              <div class="qtext">5) If someone wanted to impress you with zero effort, what would work?</div>
+              <div class="options">
+                <div class="opt" data-val="joke">A silly joke that lands</div>
+                <div class="opt" data-val="memory">Remembering a small thing you once said</div>
+                <div class="opt" data-val="help">Helping without asking</div>
+                <div class="opt" data-val="foodie">Food. Always food.</div>
+              </div>
+              <div class="myst">(This one reveals a little about your love language — no big deal 😌)</div>
+            </div>
+          </div>
+
+          <div class="qbox" data-q="6">
+            <div class="question">
+              <div class="qtext">6) Final tiny mystery: If a stranger made a cute little game for you, your first thought would be?</div>
+              <div class="options">
+                <div class="opt" data-val="aww">Aww, that’s sweet</div>
+                <div class="opt" data-val="weird">Weird… but curious</div>
+                <div class="opt" data-val="flirty">Flirty move — I like it</div>
+                <div class="opt" data-val="nah">Nah, skip</div>
+              </div>
+              <div class="myst">(Pick honestly. There’s a tiny reward after this ✨)</div>
+            </div>
+          </div>
+
+          <div style="text-align:center">
+            <button class="btn" id="showResult">Show My Mini Result</button>
+          </div>
+
+        </section>
+
+        <section id="resultPage" class="hidden">
+          <div class="result">
+            <h3 id="headline">Nice answers…</h3>
+            <p id="resultText" class="small">Crunching vibes…</p>
+
+            <div id="personalBox" style="margin-top:12px;display:none">
+              <p style="margin:0">💌 <strong id="fromName">[YourName]</strong> says: </p>
+              <div style="margin-top:8px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)"> 
+                <p id="personalMsg" style="margin:0;font-weight:600"></p>
+              </div>
+              <p class="small" style="margin-top:10px">If you liked the mini-game, a simple ‘hi’ from you will make my day 😉</p>
+            </div>
+
+            <div style="margin-top:12px">
+              <button class="btn" id="replay">Play Again</button>
+              <button class="btn" id="shareBtn" style="margin-left:8px;background:linear-gradient(90deg,#7ee7ff,#ffd1ff);">Share Screenshot</button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <footer>
+        <small>Made with a little mischief and a lot of taste. Edit the name in the file to personalise.</small>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // -- Simple interactive logic --
+    const startBtn = document.getElementById('startBtn')
+    const quiz = document.getElementById('quiz')
+    const page1 = document.getElementById('page-1')
+    const showResultBtn = document.getElementById('showResult')
+    const resultPage = document.getElementById('resultPage')
+    const personalBox = document.getElementById('personalBox')
+    const personalMsg = document.getElementById('personalMsg')
+    const fromNameEl = document.getElementById('fromName')
+
+    // === Edit this to personalise ===
+    const Anubhav = 'Arjun' // <- change this to your name or nickname
+    // =================================
+
+    fromNameEl.textContent = Anubhav
+
+    startBtn.addEventListener('click', ()=>{
+      page1.classList.add('hidden')
+      quiz.classList.remove('hidden')
+      window.scrollTo({top:0,behavior:'smooth'})
+    })
+
+    // collect answers
+    const answers = {}
+    document.querySelectorAll('.opt').forEach(opt=>{
+      opt.addEventListener('click', ()=>{
+        const q = opt.closest('.qbox').dataset.q
+        answers[q] = opt.dataset.val
+        // visually mark
+        opt.parentElement.querySelectorAll('.opt').forEach(o=>o.style.borderColor='rgba(255,255,255,0.06)')
+        opt.style.borderColor = 'rgba(255,255,255,0.22)'
+        // tiny animation: reveal small wink text briefly
+        const myst = opt.closest('.question').querySelector('.myst')
+        if(myst){
+          const prev = myst.textContent
+          myst.textContent = 'Saved ✓ — next mystery coming...' 
+          setTimeout(()=> myst.textContent = prev,1200)
+        }
+      })
+    })
+
+    showResultBtn.addEventListener('click', ()=>{
+      // ensure at least 3 answers chosen
+      if(Object.keys(answers).length < 3){
+        alert('Bas 3 answers do yaar — baaki maza aayega 😄')
+        return
+      }
+      quiz.classList.add('hidden')
+      resultPage.classList.remove('hidden')
+
+      // Create a friendly result based on a couple of answers
+      const mood = answers['1']
+      const weekend = answers['2']
+      const secret = answers['6']
+
+      let head = 'Nice answers...'
+      let txt = ''
+
+      if(mood==='sunny') txt += 'You give warm and sunny vibes — easy to smile around you. '
+      if(mood==='myst') txt += 'You have a curious, deep vibe — interesting conversations likely. '
+      if(mood==='chaos') txt += 'Full-of-fun energy — you probably keep the chat alive. '
+      if(mood==='cozy') txt += 'Calm and comforting — great to unwind with. '
+
+      if(weekend==='friends') txt += 'Weekends are for laughter & friends — you value fun. '
+      if(weekend==='solo') txt += 'You enjoy cozy solo moments — quality over quantity. '
+      if(weekend==='adventure') txt += 'Spontaneous adventures are your thing — exciting! '
+      if(weekend==='family') txt += 'Family & food matter — warm heart. '
+
+      if(secret==='aww') txt += '\nYou appreciate sweet gestures — very wholesome. '
+      if(secret==='weird') txt += '\nCuriosity wins — you will check things out. '
+      if(secret==='flirty') txt += '\nYou enjoy playful flirting — dangerously fun. '
+      if(secret==='nah') txt += '\nA cautious heart — respect that. '
+
+      document.getElementById('headline').textContent = head
+      document.getElementById('resultText').textContent = txt
+
+      // Personalised short line
+      let personal = ''
+      if(mood==='cozy' || weekend==='solo') personal = 'Tumhara comfort aur slow vibes pasand aaye — agar tum chaho, main ek calm chat shuru kar sakta hoon.'
+      else if(mood==='chaos' || weekend==='friends') personal = 'Lagta hai tum full fun wali ho — ek light-hearted chat se maza ayega.'
+      else personal = 'Tum bahut interesting lagti ho — ek hi line se start kar sakte ho.'
+
+      personalMsg.textContent = personal
+      personalBox.style.display = 'block'
+
+      // smooth scroll
+      window.scrollTo({top:0,behavior:'smooth'})
+    })
+
+    document.getElementById('replay').addEventListener('click', ()=>{
+      // reset
+      document.querySelectorAll('.opt').forEach(o=>o.style.borderColor='rgba(255,255,255,0.06)')
+      Object.keys(answers).forEach(k=>delete answers[k])
+      resultPage.classList.add('hidden')
+      quiz.classList.remove('hidden')
+      window.scrollTo({top:0,behavior:'smooth'})
+    })
+
+    document.getElementById('shareBtn').addEventListener('click', ()=>{
+      alert('Screenshot leke DM karne ka text: "Tera mini test pass kar gaya — ab tu hi bol 😄"')
+    })
+
+  </script>
+</body>
+</html>
